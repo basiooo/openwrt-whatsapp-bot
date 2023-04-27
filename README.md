@@ -19,59 +19,55 @@
 | `/libernet_info`    | Show Libernet information      |![](./screenshots/libernet_info.png)|
 
 ## 📦 Requirements
-- Node version v14.21.3
+- Node JS v14.21.3  or later
 - NPM
 
 ## ⚙️ Installation
 ### Install from Terminal
 - Update OpenWrt repo
-  ``` sh
-    opkg update
+  ``` sh 
+  opkg update
   ```
 - Install git
   ``` sh
-    opkg install git
+  opkg install git
   ```
 - Install Node and NPM
   ``` sh
-    opkg install node-npm
+  opkg install node-npm
   ```
 - Clone Project
   ``` sh
-    git clone https://github.com/basiooo/openwrt-whatsapp-bot.git
+  git clone https://github.com/basiooo/openwrt-whatsapp-bot.git
   ```
 - Open Project Directory
   ``` sh
-    cd openwrt-whatsapp-bot
+  cd openwrt-whatsapp-bot
   ```
 - Install Node packages
   ``` sh
-    npm i
-  ```
-- Install Node packages
-  ``` sh
-    npm i
+  npm install
   ```
 
 ## 🚀 Usage
 ### StartBot in background using `pm2`
 - install `pm2` globaly
   ``` sh
-    npm i pm2@latest -g
+  npm i pm2@latest -g
   ```
 - start bot
   ``` sh
-    pm2 start app.js --watch
+  pm2 start app.js --watch
   ```
 - show `pm2` logs
   ``` sh
-    pm2 logs
+  pm2 logs
   ```
 
 ### Scan QrCode
 - open `pm2` logs
   ``` sh
-    pm2 logs
+  pm2 logs
   ```
 - scan QrCode inside the logs
 - exit pm2 log using ctrl+c
