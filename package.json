@@ -1,0 +1,26 @@
+{
+  "name": "openwrt-whatsapp-bot",
+  "version": "1.0.0",
+  "description": "Whatsapp Bot For OpenWRT",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --ext .js"
+  },
+  "author": "Bagas Julianto",
+  "type": "module",
+  "dependencies": {
+    "@adiwajshing/baileys": "^5.0.0",
+    "@hapi/boom": "^10.0.1",
+    "install": "^0.13.0",
+    "npm": "^9.6.5",
+    "qrcode-terminal": "^0.12.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.39.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-promise": "^6.1.1"
+  }
+}
