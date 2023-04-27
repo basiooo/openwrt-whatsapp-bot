@@ -65,6 +65,7 @@ const whatsappService = async () => {
       const reason = new Boom(lastDisconnect.error).output.statusCode
       if (reason === DisconnectReason.badSession) {
         logger.info('Bad Session, Please Scan QR again...')
+        await fs.promises.rm(`${process.cwd()}/${SESSION_DIR}`, { maxRetries: 5, retryDelay: 2000, recursive: true, force: true })
         whatsAppSocket.logout()
       } else if (reason === DisconnectReason.connectionClosed) {
         logger.info('Connection closed, reconecting...')
@@ -74,9 +75,11 @@ const whatsappService = async () => {
         whatsappService()
       } else if (reason === DisconnectReason.connectionReplaced) {
         logger.info('Connection Replaced, Please Scan QR again...')
+        await fs.promises.rm(`${process.cwd()}/${SESSION_DIR}`, { maxRetries: 5, retryDelay: 2000, recursive: true, force: true })
         whatsAppSocket.logout()
       } else if (reason === DisconnectReason.loggedOut) {
         logger.info('Device Logged Out, Please Scan QR again...')
+        await fs.promises.rm(`${process.cwd()}/${SESSION_DIR}`, { maxRetries: 5, retryDelay: 2000, recursive: true, force: true })
         whatsAppSocket.logout()
       } else if (reason === DisconnectReason.restartRequired) {
         logger.info('Restart Required, Restarting...')
