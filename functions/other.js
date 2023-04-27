@@ -21,7 +21,7 @@ const checkMyIp = async () => {
     })
 }
 
-const sidompul = async (number = '6281936994974') => {
+const sidompul = async (number = '') => {
   const { success, phoneNumber } = processPhoneNumber(number)
   if (!success || phoneNumber === undefined) {
     return 'Nomor tidak valid.!\nContoh "/sidompul 08123456789" atau "/sidompul 628123456789"'

@@ -58,14 +58,38 @@ const processPhoneNumber = (number) => {
 
 const makeMessage = (command, body) => {
   const message = `Command " _${command}_ " Result:\n==================================\n${body}\n==================================`
-  return message
+  return {
+    text: message
+  }
 }
 
+const listCommandMessage = () => {
+  const templateButtons = [
+    { index: 1, quickReplyButton: { displayText: '/my_ip', id: 'id-like-buttons-message' } },
+    { index: 2, quickReplyButton: { displayText: '/sidompul' } },
+    { index: 3, quickReplyButton: { displayText: '/sysinfo' } },
+    { index: 4, quickReplyButton: { displayText: '/init_app' } },
+    { index: 5, quickReplyButton: { displayText: '/reboot' } },
+    { index: 6, quickReplyButton: { displayText: '/shutdown' } },
+    { index: 7, quickReplyButton: { displayText: '/firewall_rules' } },
+    { index: 8, quickReplyButton: { displayText: '/interfaces' } },
+    { index: 9, quickReplyButton: { displayText: '/openclash_info' } },
+    { index: 10, quickReplyButton: { displayText: '/openclash_proxies' } },
+    { index: 11, quickReplyButton: { displayText: '/libernet_info' } }
+  ]
+
+  const templateMessage = {
+    text: 'Daftar Perintah :',
+    templateButtons
+  }
+  return templateMessage
+}
 export {
   execShellCommand,
   secondToHourAndMinute,
   removeHTMLTags,
   latencyColor,
   processPhoneNumber,
-  makeMessage
+  makeMessage,
+  listCommandMessage
 }

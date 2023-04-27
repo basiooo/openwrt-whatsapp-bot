@@ -1,7 +1,7 @@
 import { Boom } from '@hapi/boom'
 import fs from 'fs'
 import { createRequire } from 'module'
-import { makeMessage } from './functions/utils.js'
+import { listCommandMessage, makeMessage } from './functions/utils.js'
 import { checkMyIp, sidompul } from './functions/other.js'
 import { firewallRules, initApp, networkInterfaceData, rebootDevice, shutDownDevice, sysInfo } from './functions/device.js'
 import { openClashInfo, openClashProxies } from './functions/openclash.js'
@@ -25,6 +25,17 @@ const commandHandler = async (message) => {
     const [command, number] = message.split(' ')
     const result = await sidompul(number)
     reply = makeMessage(message, result)
+  } else if (message.includes('/sidompul')) {
+    // eslint-disable-next-line no-unused-vars
+    const [command, number] = message.split(' ')
+    if (number === undefined) {
+      reply = 'Nomer tidak boleh kosong.! \nContoh "/sidompul 08123456789" atau "/sidompul 628123456789"'
+    } else {
+      reply = await sidompul(number)
+    }
+    reply = makeMessage(message, reply)
+  } else if (message === '/my_ip') {
+    reply = makeMessage(message, await checkMyIp())
   } else if (message === '/sysinfo') {
     reply = makeMessage(message, await sysInfo())
   } else if (message === '/reboot') {
@@ -43,6 +54,10 @@ const commandHandler = async (message) => {
     reply = makeMessage(message, await openClashProxies())
   } else if (message === '/libernet_info') {
     reply = makeMessage(message, await libernetInfo())
+  } else if (message === '/ping') {
+    reply = makeMessage(message, 'Pong..!')
+  } else if (message === '/menu') {
+    reply = listCommandMessage()
   } else {
     reply = makeMessage(message, 'Command Not Found.!')
   }
@@ -50,7 +65,7 @@ const commandHandler = async (message) => {
 }
 
 const whatsappService = async () => {
-  logger.level = 'info'
+  // logger.level = 'info'
   const { state, saveCreds } = await useMultiFileAuthState(SESSION_DIR)
   const whatsAppSocket = makeWASocket({
     printQRInTerminal: true,
@@ -95,13 +110,17 @@ const whatsappService = async () => {
   whatsAppSocket.ev.on('messages.upsert', async ({ messages, type }) => {
     if (type === 'notify') {
       if (!messages[0].key.fromMe) {
-        const senderMessage = messages[0].message.conversation.toLowerCase()
+        let senderMessage = ''
+        if (messages[0].message?.conversation) {
+          senderMessage = messages[0].message.conversation.toLowerCase()
+        } else if (messages[0].message?.templateButtonReplyMessage) {
+          senderMessage = messages[0].message.templateButtonReplyMessage.selectedDisplayText
+        }
         const senderNumber = messages[0].key.remoteJid
         const reply = await commandHandler(senderMessage)
         await whatsAppSocket.sendMessage(
           senderNumber,
-          { text: reply },
-          { quoted: messages[0] }
+          reply
         )
       }
     }
