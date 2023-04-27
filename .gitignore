@@ -130,4 +130,4 @@ dist
 .pnp.*
 
 # baileys
-baileys_auth_info/
+baileys_auth/

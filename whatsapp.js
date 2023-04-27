@@ -1,4 +1,5 @@
 import { Boom } from '@hapi/boom'
+import fs from 'fs'
 import { createRequire } from 'module'
 import { makeMessage } from './functions/utils.js'
 import { checkMyIp, sidompul } from './functions/other.js'
@@ -6,11 +7,14 @@ import { firewallRules, initApp, networkInterfaceData, rebootDevice, shutDownDev
 import { openClashInfo, openClashProxies } from './functions/openclash.js'
 import { libernetInfo } from './functions/libernet.js'
 const require = createRequire(import.meta.url)
+const logger = require('pino')()
 const {
   default: makeWASocket,
   useMultiFileAuthState,
   DisconnectReason
 } = require('@adiwajshing/baileys')
+
+const SESSION_DIR = 'baileys_auth'
 
 const commandHandler = async (message) => {
   let reply = ''
@@ -46,57 +50,52 @@ const commandHandler = async (message) => {
 }
 
 const whatsappService = async () => {
-  const { state, saveCreds } = await useMultiFileAuthState('baileys_auth_info')
-  const sock = makeWASocket({
+  logger.level = 'info'
+  const { state, saveCreds } = await useMultiFileAuthState(SESSION_DIR)
+  const whatsAppSocket = makeWASocket({
     printQRInTerminal: true,
-    auth: state
+    auth: state,
+    logger
   })
-  sock.ev.on('creds.update', saveCreds)
-  sock.ev.on('connection.update', async (update) => {
+  whatsAppSocket.ev.on('creds.update', saveCreds)
+  whatsAppSocket.ev.on('connection.update', async (update) => {
+    // console.log(update);
     const { connection, lastDisconnect } = update
     if (connection === 'close') {
       const reason = new Boom(lastDisconnect.error).output.statusCode
       if (reason === DisconnectReason.badSession) {
-        console.log(
-          'Bad Session File, Please Delete baileys_auth_info and Scan Again'
-        )
-        sock.logout()
+        logger.info('Bad Session, Please Scan QR again...')
+        whatsAppSocket.logout()
       } else if (reason === DisconnectReason.connectionClosed) {
-        console.log('Connection closed, reconnecting....')
+        logger.info('Connection closed, reconecting...')
         whatsappService()
       } else if (reason === DisconnectReason.connectionLost) {
-        console.log('Connection Lost from Server, reconnecting...')
+        logger.info('Connection Lost, reconnecting...')
         whatsappService()
       } else if (reason === DisconnectReason.connectionReplaced) {
-        console.log(
-          'Connection Replaced, Another New Session Opened, Please Close Current Session First'
-        )
-        sock.logout()
+        logger.info('Connection Replaced, Please Scan QR again...')
+        whatsAppSocket.logout()
       } else if (reason === DisconnectReason.loggedOut) {
-        console.log(
-          'Device Logged Out.'
-        )
-        sock.logout()
+        logger.info('Device Logged Out, Please Scan QR again...')
+        whatsAppSocket.logout()
       } else if (reason === DisconnectReason.restartRequired) {
-        console.log('Restart Required, Restarting...')
+        logger.info('Restart Required, Restarting...')
         whatsappService()
       } else if (reason === DisconnectReason.timedOut) {
-        console.log('Connection TimedOut, Reconnecting...')
+        logger.info('Connection TimedOut, Reconnecting...')
         whatsappService()
       } else {
-        sock.end(`Unknown DisconnectReason: ${reason}|${lastDisconnect.error}`)
+        whatsAppSocket.end(`Unknown DisconnectReason: ${reason}|${lastDisconnect.error}`)
       }
-    } else if (connection === 'open') {
-      console.log('opened connection')
     }
   })
-  sock.ev.on('messages.upsert', async ({ messages, type }) => {
+  whatsAppSocket.ev.on('messages.upsert', async ({ messages, type }) => {
     if (type === 'notify') {
       if (!messages[0].key.fromMe) {
         const senderMessage = messages[0].message.conversation.toLowerCase()
         const senderNumber = messages[0].key.remoteJid
         const reply = await commandHandler(senderMessage)
-        await sock.sendMessage(
+        await whatsAppSocket.sendMessage(
           senderNumber,
           { text: reply },
           { quoted: messages[0] }
