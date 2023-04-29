@@ -1,5 +1,6 @@
 import axios from 'axios'
-import { processPhoneNumber } from './utils.js'
+import { execShellCommand, processPhoneNumber } from './utils.js'
+import { resolve } from 'path'
 
 const SIDOMPUL_CHECK_QOUTA_URL = 'https://sidompul.cloudaccess.host/cek.php'
 const CHECK_MY_IP_URL = 'http://ip-api.com/json/'
@@ -37,7 +38,12 @@ const sidompul = async (number = '') => {
     })
 }
 
+const checkDnsLeak = async () => {
+  // Source https://github.com/macvk/dnsleaktest/blob/master/dnsleaktest.sh
+  return await execShellCommand(resolve(process.cwd(), 'scripts/dns_leak.sh'))
+}
 export {
   checkMyIp,
-  sidompul
+  sidompul,
+  checkDnsLeak
 }

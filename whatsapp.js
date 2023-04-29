@@ -2,7 +2,7 @@ import { Boom } from '@hapi/boom'
 import fs from 'fs'
 import { createRequire } from 'module'
 import { listCommandMessage, makeMessage } from './functions/utils.js'
-import { checkMyIp, sidompul } from './functions/other.js'
+import { checkDnsLeak, checkMyIp, sidompul } from './functions/other.js'
 import { firewallRules, initApp, networkInterfaceData, rebootDevice, shutDownDevice, sysInfo } from './functions/device.js'
 import { openClashInfo, openClashProxies } from './functions/openclash.js'
 import { libernetInfo } from './functions/libernet.js'
@@ -36,6 +36,8 @@ const commandHandler = async (message) => {
     reply = makeMessage(message, reply)
   } else if (message === '/my_ip') {
     reply = makeMessage(message, await checkMyIp())
+  } else if (message === '/dns_leak') {
+    reply = makeMessage(message, await checkDnsLeak())
   } else if (message === '/sysinfo') {
     reply = makeMessage(message, await sysInfo())
   } else if (message === '/reboot') {

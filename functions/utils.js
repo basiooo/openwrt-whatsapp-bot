@@ -65,17 +65,18 @@ const makeMessage = (command, body) => {
 
 const listCommandMessage = () => {
   const templateButtons = [
-    { index: 1, quickReplyButton: { displayText: '/my_ip', id: 'id-like-buttons-message' } },
-    { index: 2, quickReplyButton: { displayText: '/sidompul' } },
-    { index: 3, quickReplyButton: { displayText: '/sysinfo' } },
-    { index: 4, quickReplyButton: { displayText: '/init_app' } },
-    { index: 5, quickReplyButton: { displayText: '/reboot' } },
-    { index: 6, quickReplyButton: { displayText: '/shutdown' } },
-    { index: 7, quickReplyButton: { displayText: '/firewall_rules' } },
-    { index: 8, quickReplyButton: { displayText: '/interfaces' } },
-    { index: 9, quickReplyButton: { displayText: '/openclash_info' } },
-    { index: 10, quickReplyButton: { displayText: '/openclash_proxies' } },
-    { index: 11, quickReplyButton: { displayText: '/libernet_info' } }
+    { index: 1, quickReplyButton: { displayText: '/my_ip' } },
+    { index: 2, quickReplyButton: { displayText: '/dns_leak' } },
+    { index: 3, quickReplyButton: { displayText: '/sidompul' } },
+    { index: 4, quickReplyButton: { displayText: '/sysinfo' } },
+    { index: 5, quickReplyButton: { displayText: '/init_app' } },
+    { index: 6, quickReplyButton: { displayText: '/reboot' } },
+    { index: 7, quickReplyButton: { displayText: '/shutdown' } },
+    { index: 8, quickReplyButton: { displayText: '/firewall_rules' } },
+    { index: 9, quickReplyButton: { displayText: '/interfaces' } },
+    { index: 10, quickReplyButton: { displayText: '/openclash_info' } },
+    { index: 11, quickReplyButton: { displayText: '/openclash_proxies' } },
+    { index: 12, quickReplyButton: { displayText: '/libernet_info' } }
   ]
 
   const templateMessage = {
