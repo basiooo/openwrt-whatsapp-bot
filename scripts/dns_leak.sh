@@ -65,7 +65,7 @@ fi
 if hash shuf 2>/dev/null; then
     id=$(shuf -i 1000000-9999999 -n 1)
 else
-    id=$(jot -w %i -r 1 1000000 9999999)
+    id=$RANDOM
 fi
 
 for i in $(seq 1 10); do
