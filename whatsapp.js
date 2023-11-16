@@ -12,7 +12,7 @@ const {
   default: makeWASocket,
   useMultiFileAuthState,
   DisconnectReason
-} = require('@adiwajshing/baileys')
+} = require('@whiskeysockets/baileys')
 
 const SESSION_DIR = 'baileys_auth'
 

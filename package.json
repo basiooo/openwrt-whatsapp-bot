@@ -4,15 +4,15 @@
   "description": "Whatsapp Bot For OpenWRT",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .js"
   },
   "author": "Bagas Julianto",
   "type": "module",
   "dependencies": {
-    "@adiwajshing/baileys": "^5.0.0",
     "@hapi/boom": "^10.0.1",
-    "install": "^0.13.0",
+    "@whiskeysockets/baileys": "^6.5.0",
     "npm": "^9.6.5",
     "pino": "^8.11.0",
     "qrcode-terminal": "^0.12.0"
