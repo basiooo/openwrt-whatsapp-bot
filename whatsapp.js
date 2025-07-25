@@ -1,5 +1,6 @@
 import { Boom } from '@hapi/boom'
 import fs from 'fs'
+import QRCode from 'qrcode'
 import { createRequire } from 'module'
 import { listCommandMessage, makeMessage } from './functions/utils.js'
 import { checkDnsLeak, checkMyIp, sidompul } from './functions/other.js'
@@ -70,14 +71,16 @@ const whatsappService = async () => {
   // logger.level = 'info'
   const { state, saveCreds } = await useMultiFileAuthState(SESSION_DIR)
   const whatsAppSocket = makeWASocket({
-    printQRInTerminal: true,
     auth: state,
     logger
   })
   whatsAppSocket.ev.on('creds.update', saveCreds)
   whatsAppSocket.ev.on('connection.update', async (update) => {
     // console.log(update);
-    const { connection, lastDisconnect } = update
+    const { connection, lastDisconnect, qr } = update
+    if (qr) {
+      console.log(await QRCode.toString(qr, { type: 'terminal', small: true }))
+    }
     if (connection === 'close') {
       const reason = new Boom(lastDisconnect.error).output.statusCode
       if (reason === DisconnectReason.badSession) {
